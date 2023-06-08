@@ -1,92 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_app/controller/tarefaProvider.dart';
+import 'package:task_app/modelos/item.dart';
 import 'package:task_app/telas/ediarTarefa.dart';
-import 'package:task_app/telas/novaTarefa.dart';
+import 'package:task_app/telas/novaTarefa2.dart';
 
-import '../modelos/item.dart';
-
-class Home extends StatefulWidget {
-// ignore: deprecated_member_use, unnecessary_new, prefer_collection_literals
-  var items = <Item>[];
-
-  Home() {
-    items = [];
-    items.add(Item(titulo: 'Tarefa1', encerrado: false, horario: '10:25'));
-    items.add(Item(titulo: 'Tarefa2', encerrado: true, horario: '10:25'));
-    items.add(Item(titulo: 'Tarefa3', encerrado: false, horario: '10:25'));
-    items.add(Item(titulo: 'Tarefa4', encerrado: true, horario: '10:25'));
-  }
-
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  void removerItem(index) {
-    setState(() {
-      widget.items.removeAt(index);
-    });
-  }
-
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('lista de tarefas'),
+        title: Text('Lista de Tarefas'),
       ),
-      body: ListView.builder(
-        itemCount: widget.items.length,
-        itemBuilder: (context, index) {
-          return Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(widget.items[index].titulo),
-                Container(
-                  child: Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => removerItem(index),
-                        child: Icon(Icons.delete),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          var result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditarTarefa(
-                                  iten: widget.items, indice: index),
-                            ),
-                          );
-                          if (result != null) {
-                            setState(() {
-                              widget.items = result;
-                            });
-                          }
-                        },
-                        child: Icon(Icons.edit_document),
-                      )
-                    ],
-                  ),
+      body: Consumer<TarefaProvider>(
+        builder: (context, tarefaProvider, _) {
+          return ListView.builder(
+            itemCount: tarefaProvider.items.length,
+            itemBuilder: (context, index) {
+              final tarefa = tarefaProvider.items[index];
+              return ListTile(
+                title: Text(tarefa.titulo),
+                subtitle: Text(tarefa.horario),
+                trailing: Checkbox(
+                  value: tarefa.encerrado,
+                  onChanged: (value) {
+                    final novaTarefa = Item(
+                      titulo: tarefa.titulo,
+                      encerrado: value ?? false,
+                      horario: tarefa.horario,
+                    );
+                    tarefaProvider.editarTarefa(index, novaTarefa);
+                  },
                 ),
-              ],
-            ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Opções'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Editar'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditarTarefa(index: index),
+                                ),
+                              );
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Remover'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              tarefaProvider.removerTarefa(index);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              );
+            },
           );
-          // return Text(widget.items[index].titulo);
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var result = await Navigator.push(
+        onPressed: () {
+          Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Tarefas(iten: widget.items),
+              builder: (context) => NovaTarefa(),
             ),
           );
-          if (result != null) {
-            setState(() {
-              widget.items = result;
-            });
-          }
         },
         child: Icon(Icons.add),
       ),
