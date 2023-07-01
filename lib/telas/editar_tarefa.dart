@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_app/controller/tarefaProvider.dart';
+import 'package:task_app/controller/tarefa_provider.dart';
 import 'package:task_app/modelos/item.dart';
 
 class EditarTarefa extends StatelessWidget {
@@ -8,7 +8,7 @@ class EditarTarefa extends StatelessWidget {
   final TextEditingController tituloController;
   final TextEditingController horarioController;
 
-  EditarTarefa({required this.index})
+  EditarTarefa({super.key, required this.index})
       : tituloController = TextEditingController(),
         horarioController = TextEditingController();
 
@@ -16,43 +16,47 @@ class EditarTarefa extends StatelessWidget {
   Widget build(BuildContext context) {
     final tarefaProvider = Provider.of<TarefaProvider>(context);
     final tarefa = tarefaProvider.items[index];
-    tituloController.text = tarefa.titulo;
-    horarioController.text = tarefa.horario;
+    tituloController.text = tarefa.titulo!;
+    horarioController.text = tarefa.horario!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Tarefa'),
+        title: const Text('Editar Tarefa'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: tituloController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Título',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: horarioController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Horário',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 final novaTarefa = Item(
+                  id: tarefa.id,
                   titulo: tituloController.text,
-                  encerrado: tarefa.encerrado,
+                  encerrado: tarefa.encerrado!,
                   horario: horarioController.text,
                 );
-                tarefaProvider.editarTarefa(index, novaTarefa);
+                tarefaProvider.editarTarefa(
+                  novaTarefa.id!,
+                  novaTarefa,
+                );
                 Navigator.pop(context);
               },
-              child: Text('Salvar'),
+              child: const Text('Salvar'),
             ),
           ],
         ),

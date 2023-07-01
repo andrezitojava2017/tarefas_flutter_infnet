@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../modelos/item.dart';
-import '../controller/tarefaProvider.dart';
+import '../controller/tarefa_provider.dart';
 
 class NovaTarefa extends StatefulWidget {
+  const NovaTarefa({super.key});
+
   @override
-  _NovaTarefaState createState() => _NovaTarefaState();
+  NovaTarefaState createState() => NovaTarefaState();
 }
 
-class _NovaTarefaState extends State<NovaTarefa> {
+class NovaTarefaState extends State<NovaTarefa> {
   final novaTarefaController = TextEditingController();
   final horarioController = TextEditingController();
   final localizacaoController = TextEditingController();
-  Geolocator _geolocator = Geolocator();
+  final Geolocator geolocator = Geolocator();
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -44,10 +46,10 @@ class _NovaTarefaState extends State<NovaTarefa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inserir tarefa'),
+        title: const Text('Nova tarefa'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             Padding(
@@ -55,7 +57,7 @@ class _NovaTarefaState extends State<NovaTarefa> {
               child: TextFormField(
                 controller: novaTarefaController,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Nova tarefa',
                 ),
               ),
@@ -63,7 +65,7 @@ class _NovaTarefaState extends State<NovaTarefa> {
             TextFormField(
               controller: horarioController,
               keyboardType: TextInputType.datetime,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Horário',
               ),
             ),
@@ -82,7 +84,7 @@ class _NovaTarefaState extends State<NovaTarefa> {
               },
               controller: localizacaoController,
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Localização',
               ),
             ),
@@ -92,6 +94,7 @@ class _NovaTarefaState extends State<NovaTarefa> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final novaTarefa = Item(
+            id: null,
             titulo: novaTarefaController.text,
             encerrado: false,
             horario: horarioController.text,
@@ -100,10 +103,10 @@ class _NovaTarefaState extends State<NovaTarefa> {
           final tarefaProvider =
               Provider.of<TarefaProvider>(context, listen: false);
           tarefaProvider.adicionarTarefa(novaTarefa);
-          tarefaProvider.notifyListeners();
+          // tarefaProvider.notifyListeners();
           Navigator.pop(context);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.save),
       ),
     );
   }

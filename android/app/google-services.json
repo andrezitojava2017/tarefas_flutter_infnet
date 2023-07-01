@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "25227862561",
+    "project_id": "tarefas-flutter-infnet",
+    "storage_bucket": "tarefas-flutter-infnet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25227862561:android:1aa60a424c912f8499f960",
+        "android_client_info": {
+          "package_name": "com.example.task_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25227862561-s6lc64bl7ou6qae8at774ib3mecg5spu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZVz3bzEfCsF762UdvEpdi5-_LZgMs6mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25227862561-s6lc64bl7ou6qae8at774ib3mecg5spu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
